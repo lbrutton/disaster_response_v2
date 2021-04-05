@@ -1,0 +1,15 @@
+name: disaster_response_pipeline
+channels:
+  - defaults
+dependencies:
+  - python==3.9.0
+  - requests
+  - pandas
+  - numpy
+  - pip
+  - plotly
+  - flask
+  - scikit-learn 
+  - sqlite
+  - jupyter
+  - sqlalchemy
