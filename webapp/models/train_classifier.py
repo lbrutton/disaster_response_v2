@@ -23,7 +23,7 @@ import pickle
 def load_data(database_filepath):
     '''
     Pull data from sqlite DB, add it to a dataframe,
-    and split it into inputs and outputs for the model.
+    and split it into inputs and outputs for the model
     '''
     # load data from database
     engine = create_engine('sqlite:///' + database_filepath)
@@ -36,7 +36,7 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
-    """Clean and tokenize words in a given message."""
+    '''Clean and tokenize words in a given message'''
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -65,6 +65,9 @@ def build_model():
     pass
 
 def classify_model_output(y_test, y_pred):
+    '''
+    Produce a useful table to highlight the average precision, recall and fscores of the new model
+    '''
     classification_scores = []
 
     for i, column in enumerate(y_test.columns):
@@ -97,6 +100,10 @@ def classify_model_output(y_test, y_pred):
 
 def evaluate_model(model, X_test, y_test): # took out the category names input here
     # as I think it makes more sense to iterate over the columns in y_test
+    '''
+    Use the classifiy_model_output function to produce a table showing the average
+    precision, recall and fscores of the new model
+    '''
     y_pred = model.predict(X_test)
     df_classification_avg_knn = classify_model_output(y_test, y_pred)
     return df_classification_avg_knn
@@ -104,12 +111,19 @@ def evaluate_model(model, X_test, y_test): # took out the category names input h
 
 
 def save_model(model, model_filepath):
+    '''
+    Save the podel as a pickle file
+    '''
     filename = model_filepath
     pickle.dump(model, open(filename, 'wb'))
     pass
 
 
 def main():
+    '''
+    Take the database and the filepath for the model as arguments,
+    and run the other functions in this file in order to produce and optimized model for this problem
+    '''
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))

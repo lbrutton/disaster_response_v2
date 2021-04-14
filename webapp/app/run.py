@@ -16,6 +16,9 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 
 def tokenize(text):
+    '''
+    Clean and tokenize words in a given message
+    '''
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -38,7 +41,9 @@ model = joblib.load("../models/classifier_2.pkl")
 @app.route('/')
 @app.route('/index')
 def index():
-    
+    '''
+    Create the dataframes for the visualisation on the home page
+    '''
     # extract data needed for visuals
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
@@ -99,6 +104,9 @@ def index():
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
+    '''
+    Get the user inputs and run it through the model, and output the resulting classification
+    '''
     # save user input in query
     query = request.args.get('query', '') 
 
@@ -115,6 +123,9 @@ def go():
 
 
 def main():
+    '''
+    Launch the app on port 3001
+    '''
     app.run(host='0.0.0.0', port=3001, debug=True)
 
 
