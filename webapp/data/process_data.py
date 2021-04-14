@@ -2,6 +2,7 @@
 import sys
 import pandas as pd
 from sqlalchemy import create_engine
+import pdb
 
 def load_data(messages_filepath, categories_filepath):
     messages = pd.read_csv(messages_filepath)
@@ -30,13 +31,16 @@ def clean_data(df):
         categories[column] = categories[column].apply(lambda x: x[-1:])
         
         # convert column from string to numeric
-        categories[column] = categories[column].apply(lambda x: int(x))
+        categories[column] = categories[column].apply(lambda x: 1 if int(x) > 0 else 0)
     # drop the original categories column from `df`
     df.drop(['categories'], axis=1, inplace=True)
     # concatenate the original dataframe with the new `categories` dataframe
     df = pd.concat([df, categories], axis=1)
+    # remove the child alone column as it has 0 entries
+    # df.drop(['child_alone'], axis=1, inplace=True)
     # drop duplicates
     df.drop_duplicates(inplace=True)
+    print(df.related.unique())
     return df
     pass
 

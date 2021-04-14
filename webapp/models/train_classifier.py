@@ -21,6 +21,10 @@ import pickle
 
 
 def load_data(database_filepath):
+    '''
+    Pull data from sqlite DB, add it to a dataframe,
+    and split it into inputs and outputs for the model.
+    '''
     # load data from database
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql_table('Messages', con=engine)
@@ -46,12 +50,18 @@ def tokenize(text):
 
 
 def build_model():
-    pipeline_knn = Pipeline([
+    '''
+    Use scikitlearn pipeline and gridsearch to prepare
+    a Random Forest Classifier to solve this problem.
+    '''
+    pipeline_rf = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
-    return pipeline_knn
+    parameters_rf = {'clf__estimator__n_estimators': [50, 100]}
+    cv_rf = GridSearchCV(pipeline_rf, parameters_rf)
+    return cv_rf
     pass
 
 def classify_model_output(y_test, y_pred):
